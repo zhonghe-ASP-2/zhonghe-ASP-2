@@ -16,7 +16,7 @@
 
 [modbus2IoTDB](https://github.com/zhonghe-ASP-2/modbus2IoTDB)：用于模拟机生成的时序数据，并且导入到IoTDB之中
 
-[feature_judge_template](https://github.com/zhonghe-ASP-2/feature_judge_template)：18种征兆判断的具体算法实现
+[feature_judge_template](https://github.com/zhonghe-ASP-2/feature_judge_template)：18种征兆判断的具体算法实现；包含单点征兆判断程序和全量时序数据的回测；test分支包含有其他的分析方法；
 
 [zhonghe_massive_EDA](https://github.com/zhonghe-ASP-2/zhonghe_massive_EDA)：用于算法的expoloresive data analysis的若干方法，目前使用过一些动态阈值和FFT的检测方法。
 
