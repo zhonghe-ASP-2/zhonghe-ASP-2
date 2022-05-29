@@ -337,7 +337,7 @@ if(obj){
 主要流程如下：
 
 1. 创建分析任务
-2. 将主要的python文件，配置文件复制到指定的目录
+2. 将主要的python文件，配置文件复制到指定的目录，比如本环境使用的是`/workspace`目录存储相关的任务运行程序，配置和结果。程序依赖的若干python程序位于`/algorithm`目录之下
 3. 创建FMECA相关的配置文件
 4. 通过nohup来后台执行一个python程序
 
@@ -407,4 +407,20 @@ def main_process(xml_content, yml_content, dwfio):
 实现的过程中加入异常处理将输出写入到output_python.txt中，方便在DWF中下载相关的日志文件，查看执行是否产生错误。
 
 
+
+#### 关于预警信息排序方法
+
+```sql
+select test.* from (
+select max(test."createTime") as "createTime", concat(d.plt_sourceplan, test."InstancePartOID", test."FMECAOID") as "currentProcess" from 
+(select a.plt_oid as "oid",a.plt_owner as "owner",a.plt_id as "id",a.plt_lastmodifytime as "lastModifyTime",a.plt_lastmodifier as "lastModifier", cast(a.plt_createtime as timestamp) as "createTime",a.plt_creator as "creator",a.plt_sourceapp as "sourceApp",a.plt_sourcealgorithm as "sourceAlgorithm",a.plt_reason as "reason",a.plt_effectpath as "effectPath",a.plt_faillureanalysisresult as "faillureAnalysisResult",a.plt_alarmtype as "alarmType",a.plt_failurepossibility as "failurePossibility",a.plt_ruleclassinstanceoid as "ruleClassInstanceOID",a.plt_degradationfailuremode as "DegradationFailureMode",a.plt_leafnode as "LeafNode",a.plt_compliancealarm as "complianceAlarm",a.plt_fmecaoid as "FMECAOID", a.plt_red as "red",a.plt_yellow as "yellow",a.plt_white as "white", b.plt_partName as "partOID", c.plt_equipName as "InstancePartOID" ,plt_red as "red",plt_yellow as "yellow",plt_white as "white" from plt_cus_FailureAlarm as a left join plt_cus_NeuralPart as b on a.plt_partOID = b.plt_oid left join plt_cus_InstancePart as c on  a.plt_InstancePartOID = c.plt_oid order by a.plt_createTime desc) 
+as test
+left join plt_cus_FailureAnalysisApp as d on test."sourceApp" = d.plt_oid group by "currentProcess") as test1, test where test1."createTime"=test."createTime" and test."complianceAlarm" != 'NNN' order by test."createTime" desc
+```
+
+通过`concat(d.plt_sourceplan, test."InstancePartOID", test."FMECAOID")`这三个属性，来唯一的确定一条预警记录；
+
+通过`complianceAlarm`属性和时间，来显示最新的一条报警记录。
+
+中间通过若干表连接进行。
 
