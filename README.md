@@ -38,7 +38,7 @@
 
 4. 其他：
 
-[measures_hardware](https://github.com/zhonghe-ASP-2/measures_hardware)：关于测点的硬件采集方案，从零开始制作
+[measures_hardware](https://github.com/zhonghe-ASP-2/measures_hardware)：~~关于测点的硬件采集方案，从零开始制作~~
 
 
 
@@ -364,6 +364,22 @@ nohup python3 algorithm.py # python文件
 > output.log" # 标准输出log
 2>&1 &
 ```
+
+
+
+也可以配置为:
+
+```bash
+python3 algorithm.py # python文件
+-i param.xml # femca，实例零件，任务oid配置
+-y config.yml # 算法配置
+```
+
+将`-o`参数取消，这种形式将输出直接输出到console中，方便进行调试。
+
+
+
+可以看到`param.xml`和`config.yml`两个配置文件目前是必须的。
 
 
 
